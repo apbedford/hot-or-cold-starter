@@ -14,7 +14,9 @@ $("form").submit(function (event) {
   event.preventDefault();
 
   var userGuess = $("#userGuess").val();
-  $(this).val(userGuess);
+  if (userGuess !== "" && !$.isNumeric(userGuess)) {
+    alert("That's not a number!?!");
+  }
 
   /*---count guess---*/
   var count = 0;
@@ -23,35 +25,39 @@ $("form").submit(function (event) {
   });
  
  /*---userGuess range---*/
-  var difference = userGuess - randomNum;
- 
+  var difference =  Math.abs(userGuess - randomNum); 
+
   if (difference == 0) {
-    alert ("You got it!");
+    setFeedback("You got it!");
   }
-  else if (difference <=3) { //less than 3
-    alert("Scolding close!");
+  else if (difference <=3 && difference > 0) { //less than 3
+    setFeedback("Scolding close!");
   }
-  else if (difference <=5) { //less than 5
-    alert("You're sizzling!");
+  else if (difference <=5 && difference > 0) { //less than 5
+    setFeedback("You're sizzling!");
   }
 
   else if (difference <=10){ //less than 10
-    alert("You're getting warmer.");
+    setFeedback("You're getting warmer.");
   } 
   else if (difference <=20 && difference >=10){ //less than 20 & greater than 10
-    alert("Getting warm.");
+    setFeedback("Getting warm.");
   }
   else if (difference <=30 && difference >=20) {//less than 30 & greater than 20
-    alert("Getting chilly!");
+    setFeedback("Getting chilly!");
   }
   else if (difference >=40 && difference >=30) { //less than 40 & greater than 30
-    alert("You're very cold!");
+    setFeedback("You're very cold!");
   }
   else {
-    alert("You're freezing cold!");
+    setFeedback("You're freezing cold!");
   }
 
-
+  /*--- Set the feedback ---*/
+  function setFeedback(feedback) {
+    $('#feedback').text(feedback);
+  }
+  
     /*---show user guesses---*/
     $("#guessList").append('<li> '+ userGuess + '</li>');
     $("#guessList").val("");
@@ -70,7 +76,6 @@ $("a.close").click(function(){
 });
 
 });
-
 /*Break the App Logic Down Into Steps and Write Functions: We already said that you’ll need a newGame() function 
 that does everything necessary to start a new game. This function will itself need to call other functions to 
 take care of specific tasks—for instance, setting the randomly generated secret number. 
